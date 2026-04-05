@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using SQLitePCL;
 
 namespace CetBookStore.Controllers
 {
@@ -55,10 +56,8 @@ namespace CetBookStore.Controllers
                 }).ToListAsync();
 
 
-            homePageViewModel.RandomBoooks = await context.Books
-                .OrderBy(b => Guid.NewGuid())
-                .Take(6)
-                .Select(b => new BookViewModel
+           
+                var allBooks = await context.Books.Select(b => new BookViewModel
                 {
                     Id = b.Id,
                     Title = b.Title,
@@ -67,6 +66,7 @@ namespace CetBookStore.Controllers
                     OldPrice = b.PreviousPrice,
                     IsInSale = b.IsInSale
                 }).ToListAsync();
+            homePageViewModel.RandomBoooks = allBooks.OrderBy(b => Guid.NewGuid()).Take(6).ToList();
 
             return View(homePageViewModel);
         }

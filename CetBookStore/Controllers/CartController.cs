@@ -48,7 +48,7 @@ namespace CetBookStore.Controllers
                     ApplicationUserId = userId,
                     Quantity = 1,
                     // Kitap fiyatını Book modelinden alıp sepet itemına atıyoruz
-                    Price = (decimal)book.Price 
+                    Price = book.Price 
                 };
                 _context.CartItems.Add(newItem);
             }

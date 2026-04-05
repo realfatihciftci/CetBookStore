@@ -1,0 +1,50 @@
+@model IEnumerable<CetBookStore.Models.Order>
+
+@{
+    ViewData["Title"] = "Siparişlerim";
+}
+
+<div class="container mt-4">
+    <h2>Sipariş Geçmişim</h2>
+    <hr />
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">Henüz bir siparişiniz bulunmuyor.</div>
+    }
+    else
+    {
+        @foreach (var order in Model)
+        {
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                    <span><strong>Sipariş Tarihi:</strong> @order.OrderDate.ToString("dd.MM.yyyy HH:mm")</span>
+                    <span class="badge bg-success fs-6">Toplam: @order.TotalAmount.ToString("C")</span>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm mb-0">
+                        <thead>
+                        <tr>
+                            <th>Kitap Adı</th>
+                            <th>Adet</th>
+                            <th>Birim Fiyat</th>
+                            <th>Ara Toplam</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var detail in order.OrderDetails)
+                        {
+                            <tr>
+                                <td>@detail.Book?.Title</td>
+                                <td>@detail.Quantity</td>
+                                <td>@detail.Price.ToString("C")</td>
+                                <td>@((detail.Quantity * detail.Price).ToString("C"))</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    }
+</div>

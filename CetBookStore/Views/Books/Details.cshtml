@@ -80,10 +80,9 @@
 </div>
 
 <div class="mb-4">
-    <a asp-controller="Cart" asp-action="AddToCart" asp-route-bookId="@Model.Id" class="btn btn-primary">
-        Add to Cart
-    </a>
-    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning btn-lg">Edit</a> 
+    <a asp-controller="Cart" asp-action="AddToCart" asp-route-bookId="@Model.Id" class="btn btn-sm btn-success">Buy Now</a>
+    <a asp-controller="Cart" asp-action="AddToCart" asp-route-bookId="@Model.Id" class="btn btn-sm btn-primary">Add to Cart</a>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning btn-lg">Edit</a>
     <a asp-action="Index" class="btn btn-secondary btn-lg">Back to List</a>
 </div>
 

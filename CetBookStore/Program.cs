@@ -32,7 +32,9 @@ namespace CetBookStore
                 app.UseExceptionHandler("/Home/Error");
             }
             app.UseRouting();
-
+            
+            app.UseAuthentication();
+            
             app.UseAuthorization();
 
             app.MapStaticAssets();

@@ -1,0 +1,35 @@
+@model IEnumerable<CetBookStore.Models.CartItem>
+
+@{
+    ViewData["Title"] = "My Shopping Cart";
+}
+
+<h2>My Shopping Cart</h2>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Total</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Book?.Title</td>
+            <td>@item.Quantity</td>
+            <td>@item.Price.ToString("C")</td>
+            <td>@((item.Quantity * item.Price).ToString("C"))</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<div class="mt-4">
+    <h4>Total Amount: @Model.Sum(x => x.Quantity * x.Price).ToString("C")</h4>
+    <hr />
+    <a asp-action="Purchase" class="btn btn-success btn-lg">Purchase (Buy Now)</a>
+</div>

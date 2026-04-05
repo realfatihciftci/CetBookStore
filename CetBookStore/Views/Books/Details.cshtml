@@ -79,8 +79,13 @@
     </dl>
 </div>
 
-
-
+<div class="mb-4">
+    <a asp-controller="Cart" asp-action="AddToCart" asp-route-bookId="@Model.Id" class="btn btn-primary btn-lg">
+        Add to Cart
+    </a>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning btn-lg">Edit</a> 
+    <a asp-action="Index" class="btn btn-secondary btn-lg">Back to List</a>
+</div>
 
 <div class="row d-flex justify-content-center">
     <div class="col-md-8 col-lg-6">

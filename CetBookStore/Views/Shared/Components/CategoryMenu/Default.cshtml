@@ -1,18 +1,17 @@
-@model TModel
+@model IEnumerable<CetBookStore.Models.Category>
 
-@{
-    Layout = null;
-}
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
-</div>
-</body>
-</html>
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Kategoriler
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+        @foreach (var item in Model)
+        {
+            <li>
+                <a class="dropdown-item" asp-controller="Books" asp-action="Index" asp-route-categoryId="@item.Id">
+                    @item.Name
+                </a>
+            </li>
+        }
+    </ul>
+</li>

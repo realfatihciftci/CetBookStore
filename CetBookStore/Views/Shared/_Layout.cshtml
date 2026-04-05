@@ -26,15 +26,8 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Details" asp-route-id="1">Computers</a>
-                        </li>
-
-
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Details" asp-route-id="2">Novels</a>
-                        </li>
+                        @await Component.InvokeAsync("CategoryMenu")
+                        
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

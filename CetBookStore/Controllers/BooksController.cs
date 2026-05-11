@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using CetBookStore.Data;
 using CetBookStore.Models;
 using Microsoft.AspNetCore.Authorization;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 
 namespace CetBookStore.Controllers
 {
@@ -72,10 +74,17 @@ namespace CetBookStore.Controllers
                     var fileExtension = Path.GetExtension(book.ImageFile.FileName);
                     var newFileName = Guid.NewGuid().ToString("N") + fileExtension;
 
-                    book.ImageFile.OpenReadStream().CopyTo(
-                        new FileStream(Path.Combine(_hostEnvironment.WebRootPath,
-                        "images", newFileName),
-                        FileMode.Create));
+                    // Resim boyutlandırma ve kaydetme
+                    using (var image = Image.Load(book.ImageFile.OpenReadStream()))
+                    {
+                        if (image.Width > 1024)
+                        {
+                            image.Mutate(x => x.Resize(1024, 0)); // Genişliği 1024'e ayarla, yüksekliği orantılı olarak ayarla
+                        }
+                        var imagePath = Path.Combine(_hostEnvironment.WebRootPath, "images", newFileName);
+                        await image.SaveAsync(imagePath);
+                    }
+                    
                     book.ImageUrl = newFileName;  
                     _context.Add(book);
                      await _context.SaveChangesAsync();
@@ -112,17 +121,56 @@ namespace CetBookStore.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Author,Publisher,PageCount,Price,IsInSale,PreviousPrice,PublicationDate,CreatedDate,CategoryId")] Book book)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Author,Publisher,PageCount,Price,IsInSale,PreviousPrice,PublicationDate,CreatedDate,CategoryId,ImageFile,ImageUrl")] Book book)
         {
             if (id != book.Id)
-            {
                 return NotFound();
+
+            // Mevcut kitabı veritabanından al
+            var existingBook = await _context.Books.AsNoTracking().FirstOrDefaultAsync(b => b.Id == id);
+            if (existingBook == null)
+                return NotFound();
+
+            // Eğer yeni bir resim yüklendiyse
+            if (book.ImageFile != null)
+            {
+                // Eski resmi sil
+                if (!string.IsNullOrEmpty(existingBook.ImageUrl))
+                {
+                    var oldImagePath = Path.Combine(_hostEnvironment.WebRootPath, "images", existingBook.ImageUrl);
+                    if (System.IO.File.Exists(oldImagePath))
+                    {
+                        System.IO.File.Delete(oldImagePath);
+                    }
+                }
+
+                // Yeni resmi kaydet ve boyutlandır
+                var fileExtension = Path.GetExtension(book.ImageFile.FileName);
+                var newFileName = Guid.NewGuid().ToString("N") + fileExtension;
+
+                using (var image = Image.Load(book.ImageFile.OpenReadStream()))
+                {
+                    if (image.Width > 1024)
+                    {
+                        image.Mutate(x => x.Resize(1024, 0)); // Genişliği 1024'e ayarla, yüksekliği orantılı olarak ayarla
+                    }
+                    var imagePath = Path.Combine(_hostEnvironment.WebRootPath, "images", newFileName);
+                    await image.SaveAsync(imagePath);
+                }
+                book.ImageUrl = newFileName; // Yeni resim URL'sini ata
+            }
+            else
+            {
+                // Yeni resim yüklenmediyse, mevcut resim URL'sini koru
+                book.ImageUrl = existingBook.ImageUrl;
             }
 
             if (ModelState.IsValid)
             {
                 try
                 {
+                    // CreatedDate'i koru
+                    book.CreatedDate = existingBook.CreatedDate;
                     _context.Update(book);
                     await _context.SaveChangesAsync();
                 }
@@ -170,6 +218,15 @@ namespace CetBookStore.Controllers
             var book = await _context.Books.FindAsync(id);
             if (book != null)
             {
+                // Kitap silinirken resmi de sil
+                if (!string.IsNullOrEmpty(book.ImageUrl))
+                {
+                    var imagePath = Path.Combine(_hostEnvironment.WebRootPath, "images", book.ImageUrl);
+                    if (System.IO.File.Exists(imagePath))
+                    {
+                        System.IO.File.Delete(imagePath);
+                    }
+                }
                 _context.Books.Remove(book);
             }
 

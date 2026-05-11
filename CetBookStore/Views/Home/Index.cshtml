@@ -10,82 +10,30 @@
 
     @foreach (var book in Model.MostCommenteds)
     {
-            <div class="col-md-4">
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxzaG9lfGVufDB8MHx8fDE3MjEwNDEzNjd8MA&ixlib=rb-4.0.3&q=80&w=1080" class="card-img-top" alt="Product Image">
-                    <div class="card-body">
-                        <h5 class="card-title">@book.Title</h5>
-                        <p class="card-text">@book.Author </p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="h5 mb-0">@book.Price.ToString("G")</span>                            
-                        </div>
-                    </div>
-                    <div class="card-footer d-flex justify-content-between bg-light">
-                        <button class="btn btn-primary btn-sm">Add to Cart</button>
-                        <button class="btn btn-outline-secondary btn-sm"><i class="bi bi-heart"></i></button>
-                    </div>
-                </div>
-            </div>
-    
-    
+            <partial name="BookPartial" model="@book" />
     }
     </div>
   </div>
-
   <hr />
-
 <div class="container mt-5">
     <h2 class="mb-4"> New Arrivals </h2>
     <div class="row g-4">
 
         @foreach (var book in Model.NewArrivals)
         {
-            <div class="col-md-4">
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxzaG9lfGVufDB8MHx8fDE3MjEwNDEzNjd8MA&ixlib=rb-4.0.3&q=80&w=1080" class="card-img-top" alt="Product Image">
-                    <div class="card-body">
-                        <h5 class="card-title">@book.Title</h5>
-                        <p class="card-text">@book.Author </p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="h5 mb-0">@book.Price.ToString("G")</span>
-                        </div>
-                    </div>
-                    <div class="card-footer d-flex justify-content-between bg-light">
-                        <button class="btn btn-primary btn-sm">Add to Cart</button>
-                        <button class="btn btn-outline-secondary btn-sm"><i class="bi bi-heart"></i></button>
-                    </div>
-                </div>
-            </div>
-
+            <partial name="BookPartial" model="@book" />
 
         }
     </div>
 </div>
-
 <hr />
-
 <div class="container mt-5">
     <h2 class="mb-4"> Some others </h2>
     <div class="row g-4">
 
         @foreach (var book in Model.RandomBoooks)
         {
-            <div class="col-md-4">
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxzaG9lfGVufDB8MHx8fDE3MjEwNDEzNjd8MA&ixlib=rb-4.0.3&q=80&w=1080" class="card-img-top" alt="Product Image">
-                    <div class="card-body">
-                        <h5 class="card-title">@book.Title</h5>
-                        <p class="card-text">@book.Author </p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="h5 mb-0">@book.Price.ToString("G")</span>
-                        </div>
-                    </div>
-                    <div class="card-footer d-flex justify-content-between bg-light">
-                        <button class="btn btn-primary btn-sm">Add to Cart</button>
-                        <button class="btn btn-outline-secondary btn-sm"><i class="bi bi-heart"></i></button>
-                    </div>
-                </div>
-            </div>
+           <partial name="BookPartial" model="@book" />
 
 
         }

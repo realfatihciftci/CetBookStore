@@ -8,6 +8,8 @@
         public decimal Price { get; set; }
         public decimal OldPrice { get; set; }
         public bool IsInSale { get; set; }
+
+        public string? ImageUrl { get; set; }
    
 
 

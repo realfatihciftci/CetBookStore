@@ -61,6 +61,11 @@ namespace CetBookStore.Controllers
         {
             if (ModelState.IsValid)
             {
+
+              
+               
+
+
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

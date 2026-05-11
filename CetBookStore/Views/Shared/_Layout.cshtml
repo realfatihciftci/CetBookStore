@@ -26,11 +26,10 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Cart" asp-action="Index">My Cart</a>
-                        </li>
-                        @await Component.InvokeAsync("CategoryMenu")
-                        
+
+                        @await Component.InvokeAsync("DynamicMenu")
+
+
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

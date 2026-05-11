@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CetBookStore.Models
 {
@@ -29,9 +30,16 @@ namespace CetBookStore.Models
 
         public int CategoryId { get; set; }
 
+        public string? ImageUrl { get; set; }= null;
+
+        [NotMapped]
+        public IFormFile? ImageFile { get; set; } = null;
+
         public virtual Category? Category { get; set; }
 
         public virtual List<Comment>? Comments { get; set; }
+
+        
 
 
     }

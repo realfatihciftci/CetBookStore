@@ -7,7 +7,7 @@ namespace CetBookStore.Models
         public int Id { get; set; }
 
 
-        [Required]
+     
         [MaxLength(100)]
         public string UserName { get; set; } =null!;
 

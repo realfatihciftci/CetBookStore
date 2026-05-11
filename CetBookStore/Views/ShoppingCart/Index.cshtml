@@ -1,0 +1,76 @@
+﻿@model IEnumerable<CetBookStore.Models.ShoppingCart>
+
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
+<h1>My Shopping Cart</h1>
+
+</p>
+<table class="table">
+    <thead>
+        <tr>
+           
+            <th>
+                @Html.DisplayNameFor(model => model.Book)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Count)
+            </th>
+            <th>
+                Total Amount
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+          
+            <td>
+                @Html.DisplayFor(modelItem => item.Book.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Count)
+            </td>
+            <td>
+                @(item.Book.Price * item.Count)
+            </td>
+            <td>
+               
+                <a asp-action="Delete" asp-route-id="@item.Id">Remove From Basket </a>
+            </td>
+        </tr>
+}
+    </tbody>
+
+   
+</table>
+Total Amount: @Model.Sum(x => x.Book.Price * x.Count)
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Buy">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label class="control-label">Name on Card</label>
+                <input name="CardUser" class="form-control" />
+                
+            </div>
+            <div class="form-group">
+                <label class="control-label">Card Number</label>
+                <textarea name="CardNumber" class="form-control"></textarea>
+        
+            </div>
+            <div class="form-group">
+                <label  class="control-label">Adress</label>
+                <input name="Address" class="form-control" />
+               
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Buy Now" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>

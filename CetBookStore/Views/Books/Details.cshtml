@@ -92,7 +92,10 @@
             <div class="card-body p-4">
                 <div data-mdb-input-init class="form-outline mb-4">
                     <form asp-action="CommentCreate" >
-                        <input type="text" name="UserName" class="form-control" placeholder="Who you are .." />
+                        @if(!(User.Identity.IsAuthenticated))
+                        {
+                            <input type="text" name="UserName" class="form-control" placeholder="Who you are .." />
+                        }
                         <input type="text" name="Content" class="form-control" placeholder="Type comment..." />
                         <input type="hidden" name="BookId" value="@Model.Id" />
                         <button class="form-label" type="submit">+ Add a note</button>

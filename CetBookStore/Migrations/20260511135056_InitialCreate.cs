@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CetBookStore.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreateForSqlite : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -171,6 +171,30 @@ namespace CetBookStore.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Sales",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    TotalPrice = table.Column<decimal>(type: "TEXT", nullable: false),
+                    SalesDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    CetUserId = table.Column<string>(type: "TEXT", nullable: false),
+                    CardOnName = table.Column<string>(type: "TEXT", nullable: true),
+                    CardNumber = table.Column<string>(type: "TEXT", nullable: true),
+                    Address = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sales", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Sales_AspNetUsers_CetUserId",
+                        column: x => x.CetUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Books",
                 columns: table => new
                 {
@@ -186,7 +210,8 @@ namespace CetBookStore.Migrations
                     PreviousPrice = table.Column<decimal>(type: "TEXT", nullable: false),
                     PublicationDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    CategoryId = table.Column<int>(type: "INTEGER", nullable: false)
+                    CategoryId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ImageUrl = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -215,6 +240,62 @@ namespace CetBookStore.Migrations
                     table.PrimaryKey("PK_Comments", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Comments_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SaleItem",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    SaleId = table.Column<int>(type: "INTEGER", nullable: false),
+                    BookId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Count = table.Column<int>(type: "INTEGER", nullable: false),
+                    Price = table.Column<decimal>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SaleItem", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SaleItem_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SaleItem_Sales_SaleId",
+                        column: x => x.SaleId,
+                        principalTable: "Sales",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ShoppingCarts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    CetUserId = table.Column<string>(type: "TEXT", nullable: false),
+                    BookId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Count = table.Column<int>(type: "INTEGER", nullable: false),
+                    AddedDate = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShoppingCarts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ShoppingCarts_AspNetUsers_CetUserId",
+                        column: x => x.CetUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ShoppingCarts_Books_BookId",
                         column: x => x.BookId,
                         principalTable: "Books",
                         principalColumn: "Id",
@@ -267,6 +348,31 @@ namespace CetBookStore.Migrations
                 name: "IX_Comments_BookId",
                 table: "Comments",
                 column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SaleItem_BookId",
+                table: "SaleItem",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SaleItem_SaleId",
+                table: "SaleItem",
+                column: "SaleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Sales_CetUserId",
+                table: "Sales",
+                column: "CetUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShoppingCarts_BookId",
+                table: "ShoppingCarts",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShoppingCarts_CetUserId",
+                table: "ShoppingCarts",
+                column: "CetUserId");
         }
 
         /// <inheritdoc />
@@ -291,13 +397,22 @@ namespace CetBookStore.Migrations
                 name: "Comments");
 
             migrationBuilder.DropTable(
+                name: "SaleItem");
+
+            migrationBuilder.DropTable(
+                name: "ShoppingCarts");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Sales");
 
             migrationBuilder.DropTable(
                 name: "Books");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Categories");
